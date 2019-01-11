@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import {
 	Grid,
 	withStyles,
-	TextField,
 	Button,
 	Card,
 	CardContent,
@@ -13,11 +12,7 @@ import {
 	Input,
 	InputAdornment,
 	IconButton,
-	CardActions,
-	FormLabel,
-	RadioGroup,
-	FormControlLabel,
-	Radio
+	CardActions
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -85,6 +80,7 @@ class LoginPage extends Component {
 										type="text"
 										value={this.state.username}
 										onChange={this.handleChange("username")}
+										autoComplete="username"
 									/>
 								</FormControl>
 								<FormControl fullWidth margin="normal">
@@ -93,6 +89,7 @@ class LoginPage extends Component {
 									</InputLabel>
 									<Input
 										id="adornment-password"
+										autoComplete="current-password"
 										type={
 											this.state.showPassword
 												? "text"
