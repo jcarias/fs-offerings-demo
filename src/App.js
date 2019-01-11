@@ -1,28 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Router, Route } from "react-router-dom";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import configureHistory from "./_helpers/History";
+import { PrivateRoute } from "./_helpers/PrivateRoute";
+import HomePage from "./Containers/HomePage";
+import LoginPage from "./Containers/LoginPage";
+import { CssBaseline } from "@material-ui/core";
 
+const theme = createMuiTheme({
+	palette: {
+		primary: { main: "#03a9f4" },
+		secondary: { main: "#ffc400" }
+	},
+	typography: { useNextVariants: true }
+});
+
+const history = configureHistory();
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<MuiThemeProvider theme={theme}>
+				<CssBaseline />
+				<Router history={history}>
+					<React.Fragment>
+						<PrivateRoute exact path="/" component={HomePage} />
+						<Route path="/login" component={LoginPage} />
+					</React.Fragment>
+				</Router>
+			</MuiThemeProvider>
+		);
+	}
 }
 
 export default App;
