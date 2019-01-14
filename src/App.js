@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Router, Route } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import configureHistory from "./_helpers/History";
+import { history } from "./_helpers/History";
 import { PrivateRoute } from "./_helpers/PrivateRoute";
 import HomePage from "./Containers/HomePage";
 import LoginPage from "./Containers/LoginPage";
@@ -15,7 +15,6 @@ const theme = createMuiTheme({
 	typography: { useNextVariants: true }
 });
 
-const history = configureHistory();
 class App extends Component {
 	render() {
 		return (

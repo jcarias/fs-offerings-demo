@@ -1,7 +1,9 @@
 import { createBrowserHistory, createHashHistory } from "history";
 
-export default function configureHistory() {
+export function configureHistory() {
 	return window.matchMedia("(display-mode: standalone)").matches
 		? createHashHistory()
 		: createBrowserHistory();
 }
+
+export const history = configureHistory();

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
@@ -11,7 +12,9 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { Field, reduxForm } from "redux-form";
 import { Typography } from "@material-ui/core";
-import { SubmissionError } from "redux-form";
+
+import { userActions } from "../_actions/user.actions";
+import { history } from "../_helpers/History";
 
 const renderInputField = ({
 	input,
@@ -21,10 +24,16 @@ const renderInputField = ({
 	meta: { touched, error },
 	...rest
 }) => (
-	<FormControl fullWidth margin="normal" error={touched && error !== ""}>
+	<FormControl
+		fullWidth
+		margin="normal"
+		error={touched && error !== undefined}
+	>
 		<InputLabel htmlFor={name}>{label}</InputLabel>
 		<Input {...input} id={name} type={type} {...rest} />
-		{touched && error !== "" && <FormHelperText>{error}</FormHelperText>}
+		{touched && error !== undefined && (
+			<FormHelperText>{error}</FormHelperText>
+		)}
 	</FormControl>
 );
 
@@ -38,6 +47,12 @@ class LoginForm extends Component {
 		};
 	}
 
+	componentDidMount() {
+		if (localStorage.getItem("user")) {
+			history.push("/");
+		}
+	}
+
 	handleChange = prop => event => {
 		this.setState({ [prop]: event.target.value });
 	};
@@ -46,26 +61,23 @@ class LoginForm extends Component {
 		this.setState(state => ({ showPassword: !state.showPassword }));
 	};
 
-	onSubmit = e => {
-		if (e && e.preventDefault) {
-			e.preventDefault();
-		}
-		console.log(e);
-		throw new SubmissionError({ _error: "Login failed!" });
+	onSubmit = values => {
+		const { username, password } = values;
+		this.props.loginDispatcher(username, password);
 	};
 
 	render() {
-		const { error, handleSubmit, reset, submitting } = this.props;
+		const { loginError, handleSubmit, reset, submitting } = this.props;
 		return (
 			<form onSubmit={handleSubmit(this.onSubmit)}>
-				{error && (
+				{loginError && (
 					<Typography
 						align="center"
 						color="error"
 						component="h2"
 						gutterBottom
 					>
-						{error}
+						{loginError.message}
 					</Typography>
 				)}
 				<Field
@@ -141,6 +153,26 @@ const validate = values => {
 	}
 	return errors;
 };
+
+const mapStateToProps = (state, ownProps) => {
+	return {
+		user: state.UserReducer.user,
+		loginError: state.UserReducer.error
+	};
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		loginDispatcher: (username, password) => {
+			dispatch(userActions.login(username, password));
+		}
+	};
+};
+
+LoginForm = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(LoginForm);
 
 export default reduxForm({
 	form: "loginForm",

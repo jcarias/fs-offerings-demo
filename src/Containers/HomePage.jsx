@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Typography } from "@material-ui/core";
+import { connect } from "react-redux";
+import { Typography, Button } from "@material-ui/core";
+import { userActions } from "../_actions/user.actions";
 
 class HomePage extends Component {
 	constructor(props) {
@@ -7,8 +9,31 @@ class HomePage extends Component {
 		this.state = {};
 	}
 	render() {
-		return <Typography variant="h2">Home Page</Typography>;
+		return (
+			<div>
+				<Typography variant="h2">Home Page</Typography>
+				<Typography>{this.props.user.name}</Typography>
+				<Button onClick={this.props.logOut}>Log Out</Button>
+			</div>
+		);
 	}
 }
 
-export default HomePage;
+const mapStateToProps = (state, ownProps) => {
+	return {
+		user: state.UserReducer.user
+	};
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		logOut: () => {
+			dispatch(userActions.logout());
+		}
+	};
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(HomePage);
