@@ -6,8 +6,27 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { Field, reduxForm } from "redux-form";
+import { Typography } from "@material-ui/core";
+import { SubmissionError } from "redux-form";
+
+const renderInputField = ({
+	input,
+	label,
+	type,
+	name,
+	meta: { touched, error },
+	...rest
+}) => (
+	<FormControl fullWidth margin="normal" error={touched && error !== ""}>
+		<InputLabel htmlFor={name}>{label}</InputLabel>
+		<Input {...input} id={name} type={type} {...rest} />
+		{touched && error !== "" && <FormHelperText>{error}</FormHelperText>}
+	</FormControl>
+);
 
 class LoginForm extends Component {
 	constructor(props) {
@@ -31,51 +50,54 @@ class LoginForm extends Component {
 		if (e && e.preventDefault) {
 			e.preventDefault();
 		}
-		const { username, password } = this.state;
-		this.props.onFormSubmit({ username, password });
+		console.log(e);
+		throw new SubmissionError({ _error: "Login failed!" });
 	};
 
 	render() {
+		const { error, handleSubmit, reset, submitting } = this.props;
 		return (
-			<form onSubmit={this.onSubmit}>
-				<FormControl fullWidth margin="normal">
-					<InputLabel htmlFor="adornment-username">
-						Username
-					</InputLabel>
-					<Input
-						id="adornment-username"
-						type="text"
-						value={this.state.username}
-						onChange={this.handleChange("username")}
-						autoComplete="username"
-					/>
-				</FormControl>
-				<FormControl fullWidth margin="normal">
-					<InputLabel htmlFor="adornment-password">
-						Password
-					</InputLabel>
-					<Input
-						id="adornment-password"
-						autoComplete="current-password"
-						type={this.state.showPassword ? "text" : "password"}
-						value={this.state.password}
-						onChange={this.handleChange("password")}
-						endAdornment={
-							<InputAdornment position="end">
-								<IconButton
-									aria-label="Toggle password visibility"
-									onClick={this.handleClickShowPassword}
-								>
-									{this.state.showPassword ? (
-										<Visibility />
-									) : (
-										<VisibilityOff />
-									)}
-								</IconButton>
-							</InputAdornment>
-						}
-					/>
-				</FormControl>
+			<form onSubmit={handleSubmit(this.onSubmit)}>
+				{error && (
+					<Typography
+						align="center"
+						color="error"
+						component="h2"
+						gutterBottom
+					>
+						{error}
+					</Typography>
+				)}
+				<Field
+					name="username"
+					type="text"
+					component={renderInputField}
+					label="Username"
+					autoComplete="username"
+				/>
+
+				<Field
+					name="password"
+					type={this.state.showPassword ? "text" : "password"}
+					component={renderInputField}
+					label="Password"
+					autoComplete="current-password"
+					endAdornment={
+						<InputAdornment position="end">
+							<IconButton
+								aria-label="Toggle password visibility"
+								onClick={this.handleClickShowPassword}
+							>
+								{this.state.showPassword ? (
+									<Visibility />
+								) : (
+									<VisibilityOff />
+								)}
+							</IconButton>
+						</InputAdornment>
+					}
+				/>
+
 				<div style={{ marginTop: 16 }}>
 					<Grid
 						container
@@ -85,6 +107,7 @@ class LoginForm extends Component {
 					>
 						<Grid item>
 							<Button
+								disabled={submitting}
 								type="submit"
 								variant="outlined"
 								color="primary"
@@ -93,7 +116,13 @@ class LoginForm extends Component {
 							</Button>
 						</Grid>
 						<Grid item>
-							<Button variant="outlined">forgot password</Button>
+							<Button
+								variant="outlined"
+								onClick={reset}
+								disabled={submitting}
+							>
+								Reset
+							</Button>
 						</Grid>
 					</Grid>
 				</div>
@@ -102,4 +131,18 @@ class LoginForm extends Component {
 	}
 }
 
-export default LoginForm;
+const validate = values => {
+	const errors = {};
+	if (!values.username) {
+		errors.username = "Required";
+	}
+	if (!values.password) {
+		errors.password = "Required";
+	}
+	return errors;
+};
+
+export default reduxForm({
+	form: "loginForm",
+	validate
+})(LoginForm);

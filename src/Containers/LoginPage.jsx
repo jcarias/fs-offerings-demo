@@ -7,8 +7,7 @@ import {
 	CardHeader,
 	Divider,
 	CardActions,
-	Avatar,
-	CardMedia
+	Avatar
 } from "@material-ui/core";
 import LoginForm from "../components/LoginForm";
 import NB_Logo from "../assets/images/NB_logo.png";
