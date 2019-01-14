@@ -2,20 +2,16 @@ import React, { Component } from "react";
 import {
 	Grid,
 	withStyles,
-	Button,
 	Card,
 	CardContent,
 	CardHeader,
 	Divider,
-	FormControl,
-	InputLabel,
-	Input,
-	InputAdornment,
-	IconButton,
-	CardActions
+	CardActions,
+	Avatar,
+	CardMedia
 } from "@material-ui/core";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import LoginForm from "../components/LoginForm";
+import NB_Logo from "../assets/images/NB_logo.png";
 
 const styles = theme => ({
 	root: {
@@ -43,15 +39,12 @@ class LoginPage extends Component {
 		};
 	}
 
-	handleChange = prop => event => {
-		this.setState({ [prop]: event.target.value });
-	};
-
-	handleClickShowPassword = () => {
-		this.setState(state => ({ showPassword: !state.showPassword }));
+	onFormSubmit = credentials => {
+		console.log(credentials);
 	};
 
 	render() {
+		console.log(NB_Logo);
 		const { classes } = this.props;
 		return (
 			<Grid
@@ -64,81 +57,23 @@ class LoginPage extends Component {
 				<Grid item>
 					<Card className={classes.card}>
 						<CardHeader
-							title="Well Come to Demo"
+							title="Offerings Demo"
 							subheader="Log in to access the app's resources"
 							className={classes.cardHeader}
+							avatar={
+								<Avatar
+									className={classes.avatar}
+									src={NB_Logo}
+									style={{
+										backgroundColor: "#FFF",
+										padding: "5px"
+									}}
+								/>
+							}
 						/>
 						<Divider />
 						<CardContent>
-							<form>
-								<FormControl fullWidth margin="normal">
-									<InputLabel htmlFor="adornment-username">
-										Username
-									</InputLabel>
-									<Input
-										id="adornment-username"
-										type="text"
-										value={this.state.username}
-										onChange={this.handleChange("username")}
-										autoComplete="username"
-									/>
-								</FormControl>
-								<FormControl fullWidth margin="normal">
-									<InputLabel htmlFor="adornment-password">
-										Password
-									</InputLabel>
-									<Input
-										id="adornment-password"
-										autoComplete="current-password"
-										type={
-											this.state.showPassword
-												? "text"
-												: "password"
-										}
-										value={this.state.password}
-										onChange={this.handleChange("password")}
-										endAdornment={
-											<InputAdornment position="end">
-												<IconButton
-													aria-label="Toggle password visibility"
-													onClick={
-														this
-															.handleClickShowPassword
-													}
-												>
-													{this.state.showPassword ? (
-														<Visibility />
-													) : (
-														<VisibilityOff />
-													)}
-												</IconButton>
-											</InputAdornment>
-										}
-									/>
-								</FormControl>
-								<div style={{ marginTop: 16 }}>
-									<Grid
-										container
-										justify="center"
-										alignItems="center"
-										spacing={16}
-									>
-										<Grid item>
-											<Button
-												variant="outlined"
-												color="primary"
-											>
-												Login
-											</Button>
-										</Grid>
-										<Grid item>
-											<Button variant="outlined">
-												forgot password
-											</Button>
-										</Grid>
-									</Grid>
-								</div>
-							</form>
+							<LoginForm onFormSubmit={this.onFormSubmit} />
 						</CardContent>
 						<CardActions />
 					</Card>
