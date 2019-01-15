@@ -1,41 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
+import { Field, reduxForm } from "redux-form";
+
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import Typography from "@material-ui/core/Typography";
+
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { Field, reduxForm } from "redux-form";
-import { Typography } from "@material-ui/core";
 
 import { userActions } from "../_actions/user.actions";
 import { history } from "../_helpers/History";
-
-const renderInputField = ({
-	input,
-	label,
-	type,
-	name,
-	meta: { touched, error },
-	...rest
-}) => (
-	<FormControl
-		fullWidth
-		margin="normal"
-		error={touched && error !== undefined}
-	>
-		<InputLabel htmlFor={name}>{label}</InputLabel>
-		<Input {...input} id={name} type={type} {...rest} />
-		{touched && error !== undefined && (
-			<FormHelperText>{error}</FormHelperText>
-		)}
-	</FormControl>
-);
+import { RenderInputField } from "./RenderInputField";
 
 class LoginForm extends Component {
 	constructor(props) {
@@ -83,7 +61,7 @@ class LoginForm extends Component {
 				<Field
 					name="username"
 					type="text"
-					component={renderInputField}
+					component={RenderInputField}
 					label="Username"
 					autoComplete="username"
 				/>
@@ -91,7 +69,7 @@ class LoginForm extends Component {
 				<Field
 					name="password"
 					type={this.state.showPassword ? "text" : "password"}
-					component={renderInputField}
+					component={RenderInputField}
 					label="Password"
 					autoComplete="current-password"
 					endAdornment={
