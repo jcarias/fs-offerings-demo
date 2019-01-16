@@ -7,6 +7,7 @@ import HomePage from "./Containers/HomePage";
 import LoginPage from "./Containers/LoginPage";
 import { CssBaseline } from "@material-ui/core";
 import UserProfile from "./Containers/UserProfile";
+import NewsFeedPage from "./Containers/NewsFeedPage";
 
 const theme = createMuiTheme({
 	palette: {
@@ -36,6 +37,7 @@ class App extends Component {
 						<Route path="/login" component={LoginPage} />
 						<PrivateRoute exact path="/" component={HomePage} />
 						<PrivateRoute path="/profile" component={UserProfile} />
+						<PrivateRoute path="/news" component={NewsFeedPage} />
 						<Route component={NoMatch} />
 					</Switch>
 				</Router>

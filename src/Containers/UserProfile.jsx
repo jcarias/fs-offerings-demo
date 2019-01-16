@@ -1,17 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
-
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-
 import { withStyles } from "@material-ui/core/styles";
-import ArrowBack from "@material-ui/icons/ArrowBack";
-
-import { history } from "../_helpers/History";
+import BackAppBar from "../components/BackAppBar";
 
 const styles = theme => ({
 	root: {
@@ -27,29 +20,14 @@ class UserProfile extends Component {
 		super(props);
 		this.state = { editMode: false };
 	}
+
 	render() {
 		const { classes, loggedUser } = this.props;
 		return (
 			<React.Fragment>
-				<AppBar position="static">
-					<Toolbar>
-						<IconButton
-							className={classes.menuButton}
-							color="inherit"
-							aria-label="Back"
-							onClick={history.goBack}
-						>
-							<ArrowBack />
-						</IconButton>
-						<Typography
-							variant="h6"
-							color="inherit"
-							className={classes.grow}
-						>
-							Profile
-						</Typography>
-					</Toolbar>
-				</AppBar>
+				<BackAppBar title={"User Profile"}>
+					<Button>Hello</Button>
+				</BackAppBar>
 				<div className={classes.root}>
 					<Grid container spacing={16}>
 						{Object.keys(loggedUser).map((key, index) => {

@@ -10,5 +10,11 @@ export const Apps = [
 		initials: "CP",
 		description: "Celebração um contrato de compra e venda.",
 		target: "/profile"
+	},
+	{
+		name: "News",
+		initials: "N",
+		description: "Feed de notícias",
+		target: "/news"
 	}
 ];
