@@ -12,7 +12,8 @@ import RolesTable from "../components/RolesTable";
 
 const styles = theme => ({
 	root: {
-		padding: theme.spacing.unit
+		padding: theme.spacing.unit,
+		paddingTop: theme.spacing.unit * 9
 	},
 	grow: {
 		flexGrow: 1

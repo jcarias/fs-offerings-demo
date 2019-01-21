@@ -71,7 +71,7 @@ class NewsFeedPage extends Component {
 						Refresh
 					</Button>
 				</BackAppBar>
-				<div style={{ padding: 8 }}>
+				<div style={{ padding: 8, paddingTop: 72 }}>
 					<Grid container spacing={16}>
 						{loading ? (
 							<Loader message="Please wait...Fetching news articles." />
