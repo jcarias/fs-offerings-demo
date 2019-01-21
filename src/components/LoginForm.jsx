@@ -60,6 +60,7 @@ class LoginForm extends Component {
 						<CircularProgress />
 					</div>
 				)}
+
 				{loginError && (
 					<Typography align="center" color="error" gutterBottom>
 						{loginError.message}

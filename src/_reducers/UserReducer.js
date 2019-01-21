@@ -21,6 +21,12 @@ export const UserReducer = (state = initialState, action) => {
 			return { error: action.error, loading: false };
 		case userConstants.LOGOUT:
 			return {};
+		case userConstants.ROLES_REQUEST:
+			return { ...state, roles: [], loading: true };
+		case userConstants.ROLES_RESPONSE:
+			return { ...state, roles: action.roles, loading: false };
+		case userConstants.ROLES_FAILURE:
+			return { error: action.error, loading: false };
 		default:
 			return state;
 	}

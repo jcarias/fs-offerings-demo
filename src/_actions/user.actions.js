@@ -1,13 +1,15 @@
 import { history } from "../_helpers/History";
 import {
 	login as loginService,
-	logout as logoutService
+	logout as logoutService,
+	fetchUserRoles
 } from "../_helpers/HTTPClient";
 import { userConstants } from "../constants/user.constants";
 
 export const userActions = {
 	login,
-	logout
+	logout,
+	getUserRoles
 };
 
 function login(username, password) {
@@ -44,4 +46,25 @@ function logout() {
 	logoutService();
 	history.push("/login");
 	return { type: userConstants.LOGOUT };
+}
+
+function getUserRoles(user, limit) {
+	return dispatch => {
+		dispatch({
+			type: userConstants.ROLES_REQUEST
+		});
+
+		fetchUserRoles(user, limit).then(
+			roles =>
+				dispatch({
+					type: userConstants.ROLES_RESPONSE,
+					roles
+				}),
+			error =>
+				dispatch({
+					type: userConstants.ROLES_FAILURE,
+					error
+				})
+		);
+	};
 }

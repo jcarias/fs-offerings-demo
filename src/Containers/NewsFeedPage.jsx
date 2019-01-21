@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import Axios from "axios";
 
-import { Button, Grid, CircularProgress, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 
 import BackAppBar from "../components/BackAppBar";
 import FeedArticle from "../components/FeedArticle";
+import Loader from "../components/Loader";
 
 const NewsArticles = ({ data }) => {
 	return data.articles ? (
@@ -73,9 +74,7 @@ class NewsFeedPage extends Component {
 				<div style={{ padding: 8 }}>
 					<Grid container spacing={16}>
 						{loading ? (
-							<Grid item>
-								<CircularProgress color="primary" />
-							</Grid>
+							<Loader message="Please wait...Fetching news articles." />
 						) : error ? (
 							<Grid item>
 								<pre>{JSON.stringify(error, null, 2)}</pre>

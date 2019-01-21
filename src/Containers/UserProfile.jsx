@@ -4,8 +4,11 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
+import Divider from "@material-ui/core/Divider";
 import BackAppBar from "../components/BackAppBar";
-import { fetchUserRoles } from "../_helpers/HTTPClient";
+import { userActions } from "../_actions/user.actions";
+import Loader from "../components/Loader";
+import RolesTable from "../components/RolesTable";
 
 const styles = theme => ({
 	root: {
@@ -23,34 +26,52 @@ class UserProfile extends Component {
 	}
 
 	render() {
-		const { classes, loggedUser } = this.props;
+		const { classes, loggedUser, userRoles, loading } = this.props;
 		return (
 			<React.Fragment>
+				{loading && <Loader />}
 				<BackAppBar title={"User Profile"}>
-					<Button onClick={() => fetchUserRoles(loggedUser, 5)}>
-						Hello
+					<Button onClick={() => this.props.getRoles(loggedUser, 5)}>
+						Reload Roles
 					</Button>
 				</BackAppBar>
 				<div className={classes.root}>
 					<Grid container spacing={16}>
+						<Grid item xs={12}>
+							<Typography variant="h5">User Info</Typography>
+							<Divider />
+						</Grid>
 						{Object.keys(loggedUser).map((key, index) => {
 							let value = loggedUser[key];
 							return (
 								<React.Fragment key={index}>
-									<Grid item xs={2}>
+									<Grid item xs={12} sm={4} md={2}>
 										<Typography
 											color="textSecondary"
-											align="right"
+											noWrap
 										>
 											{key}
 										</Typography>
 									</Grid>
-									<Grid item xs={10}>
-										<Typography noWrap>{value}</Typography>
+									<Grid item xs={12} sm={8} md={10}>
+										<Typography noWrap gutterBottom>
+											{value}
+										</Typography>
 									</Grid>
 								</React.Fragment>
 							);
 						})}
+						<Grid item xs={12}>
+							<Typography variant="h5">Roles</Typography>
+							<Divider />
+						</Grid>
+						<Grid item xs={12}>
+							{userRoles ? (
+								<RolesTable roles={userRoles} />
+							) : (
+								<Typography>No roles</Typography>
+							)}
+						</Grid>
 					</Grid>
 				</div>
 			</React.Fragment>
@@ -61,10 +82,23 @@ class UserProfile extends Component {
 const mapStateToProps = (state, ownProps) => {
 	console.log(state);
 	return {
-		loggedUser: state.UserReducer.user
+		loading: state.UserReducer.loading,
+		loggedUser: state.UserReducer.user,
+		userRoles: state.UserReducer.roles
 	};
 };
 
-UserProfile = connect(mapStateToProps)(UserProfile);
+const mapDispatchToProps = (dispatch, ownProps) => {
+	return {
+		getRoles: (user, limit) => {
+			dispatch(userActions.getUserRoles(user, limit));
+		}
+	};
+};
+
+UserProfile = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(UserProfile);
 
 export default withStyles(styles)(UserProfile);

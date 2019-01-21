@@ -26,7 +26,9 @@ export const fetchUserRoles = (user, limit = 100) => {
 		headers: { Authorization: "Bearer " + user.accessToken }
 	});
 
-	instance.get(`/users/${user.id}/roles?limit=${limit}`).then(response => {
-		return response.data;
-	});
+	return instance
+		.get(`/users/${user.id}/roles?limit=${limit}`)
+		.then(response => {
+			return response.data;
+		});
 };

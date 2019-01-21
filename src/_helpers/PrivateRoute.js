@@ -4,7 +4,6 @@ import { logout } from "./HTTPClient";
 
 const isSessionValid = () => {
 	let sessionUser = sessionStorage.getItem("user");
-	console.log(sessionUser);
 	if (sessionUser) {
 		let sessionUserData = JSON.parse(sessionUser);
 
@@ -26,6 +25,7 @@ const isSessionValid = () => {
 			seconds,
 			999
 		);
+
 		let validSession = sessionExpireDate.getTime() > new Date().getTime();
 		if (!validSession) {
 			logout();
