@@ -9,7 +9,7 @@ export const Apps = [
 		name: "Contrato Promessa C&V",
 		initials: "CP",
 		description: "Celebração um contrato de compra e venda.",
-		target: "/profile"
+		target: "/purchase-sale-promise"
 	},
 	{
 		name: "News",
