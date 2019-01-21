@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import BackAppBar from "../components/BackAppBar";
+import { fetchUserRoles } from "../_helpers/HTTPClient";
 
 const styles = theme => ({
 	root: {
@@ -26,7 +27,9 @@ class UserProfile extends Component {
 		return (
 			<React.Fragment>
 				<BackAppBar title={"User Profile"}>
-					<Button>Hello</Button>
+					<Button onClick={() => fetchUserRoles(loggedUser, 5)}>
+						Hello
+					</Button>
 				</BackAppBar>
 				<div className={classes.root}>
 					<Grid container spacing={16}>

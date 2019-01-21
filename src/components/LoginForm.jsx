@@ -14,6 +14,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { userActions } from "../_actions/user.actions";
 import { history } from "../_helpers/History";
 import { RenderInputField } from "./RenderInputField";
+import { CircularProgress } from "@material-ui/core";
 
 class LoginForm extends Component {
 	constructor(props) {
@@ -26,7 +27,7 @@ class LoginForm extends Component {
 	}
 
 	componentDidMount() {
-		if (localStorage.getItem("user")) {
+		if (sessionStorage.getItem("user")) {
 			history.push("/");
 		}
 	}
@@ -45,25 +46,33 @@ class LoginForm extends Component {
 	};
 
 	render() {
-		const { loginError, handleSubmit, reset, submitting } = this.props;
+		const {
+			loginError,
+			handleSubmit,
+			reset,
+			submitting,
+			loading
+		} = this.props;
 		return (
 			<form onSubmit={handleSubmit(this.onSubmit)}>
+				{loading && (
+					<div style={{ display: "flex", justifyContent: "center" }}>
+						<CircularProgress />
+					</div>
+				)}
 				{loginError && (
-					<Typography
-						align="center"
-						color="error"
-						component="h2"
-						gutterBottom
-					>
+					<Typography align="center" color="error" gutterBottom>
 						{loginError.message}
 					</Typography>
 				)}
+
 				<Field
 					name="username"
 					type="text"
 					component={RenderInputField}
 					label="Username"
 					autoComplete="username"
+					disabled={loading}
 				/>
 
 				<Field
@@ -86,6 +95,7 @@ class LoginForm extends Component {
 							</IconButton>
 						</InputAdornment>
 					}
+					disabled={loading}
 				/>
 
 				<div style={{ marginTop: 16 }}>
@@ -97,7 +107,7 @@ class LoginForm extends Component {
 					>
 						<Grid item>
 							<Button
-								disabled={submitting}
+								disabled={submitting || loading}
 								type="submit"
 								variant="outlined"
 								color="primary"
@@ -109,7 +119,7 @@ class LoginForm extends Component {
 							<Button
 								variant="outlined"
 								onClick={reset}
-								disabled={submitting}
+								disabled={submitting || loading}
 							>
 								Reset
 							</Button>
@@ -135,6 +145,7 @@ const validate = values => {
 const mapStateToProps = (state, ownProps) => {
 	return {
 		user: state.UserReducer.user,
+		loading: state.UserReducer.loading,
 		loginError: state.UserReducer.error
 	};
 };

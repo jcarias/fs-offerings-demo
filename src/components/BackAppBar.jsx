@@ -18,7 +18,7 @@ const styles = theme => ({
 
 const BackAppBar = props => {
 	const { classes, title } = props;
-	console.log(props);
+
 	return (
 		<AppBar position="static" color="default">
 			<Toolbar>
