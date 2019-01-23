@@ -171,7 +171,6 @@ const validate = values => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-	console.log(state, ownProps);
 	return {
 		user: state.UserReducer.user,
 		loading: state.UserReducer.loading,

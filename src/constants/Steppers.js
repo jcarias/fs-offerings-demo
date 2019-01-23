@@ -32,19 +32,19 @@ export const stepsCPCV = [
 
 export const stepsPropertyReservation = [
 	{
-		label: "Seleção do Imóvel",
-		data: {},
-		visited: true,
-		completed: true
-	},
-	{
-		label: "Dados Vendedor",
+		label: "Pesquisa do Imóvel",
 		data: {},
 		visited: true,
 		completed: false
 	},
 	{
-		label: "Dados Comprador",
+		label: "Criação de Proposta de Compra",
+		data: {},
+		visited: false,
+		completed: false
+	},
+	{
+		label: "Decisão do Vendedor",
 		data: {},
 		visited: false,
 		completed: false
@@ -53,12 +53,14 @@ export const stepsPropertyReservation = [
 		label: "Assinaturas",
 		data: {},
 		visited: false,
-		completed: false
+		completed: false,
+		hidden: true
 	},
 	{
 		label: "Contrato Final",
 		data: {},
 		visited: false,
-		completed: false
+		completed: false,
+		hidden: true
 	}
 ];

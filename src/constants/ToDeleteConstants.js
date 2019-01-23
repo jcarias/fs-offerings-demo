@@ -3,7 +3,7 @@ export const Apps = [
 		name: "Reserva de Propriedade",
 		initials: "RP",
 		description: "Efectuar a reserva de uma propriedade.",
-		target: "/profile"
+		target: "/property-reservation"
 	},
 	{
 		name: "Contrato Promessa C&V",

@@ -6,3 +6,15 @@ export const dataTemplateCPCV = {
 		}
 	}
 };
+
+export const dataTemplateRP = {
+	currentStep: 0,
+	data: {
+		propertySelection: {
+			propertyId: ""
+		},
+		purchaseProposal: {
+			purposedValue: 0
+		}
+	}
+};

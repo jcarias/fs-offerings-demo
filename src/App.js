@@ -9,6 +9,7 @@ import { CssBaseline } from "@material-ui/core";
 import UserProfile from "./Containers/UserProfile";
 import NewsFeedPage from "./Containers/NewsFeedPage";
 import PurchaseAndSalePromise from "./Containers/PurchaseAndSalePromise";
+import PropertyReservation from "./Containers/PropertyReservation";
 
 const theme = createMuiTheme({
 	palette: {
@@ -42,6 +43,10 @@ class App extends Component {
 						<PrivateRoute
 							path="/purchase-sale-promise"
 							component={PurchaseAndSalePromise}
+						/>
+						<PrivateRoute
+							path="/property-reservation"
+							component={PropertyReservation}
 						/>
 						<Route component={NoMatch} />
 					</Switch>

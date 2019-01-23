@@ -78,7 +78,7 @@ class PurchaseAndSalePromise extends Component {
 									stepsData={this.state.steps}
 									labelClickHandler={this.handleLabelClick}
 									currentStepClass={classes.currentStep}
-									expanded={false}
+									expanded={true}
 								/>
 							</Paper>
 						</Grid>

@@ -5,6 +5,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 
 import FormHelperText from "@material-ui/core/FormHelperText";
+import PropertyChooser from "./formsRP/PropertyChooser";
 
 export const RenderInputField = ({
 	input,
@@ -20,7 +21,9 @@ export const RenderInputField = ({
 		error={touched && error !== undefined}
 	>
 		<InputLabel htmlFor={name}>{label}</InputLabel>
-		<Input {...input} id={name} type={type} {...rest} />
+		<Input {...input} id={name} type={type} {...rest}>
+			{PropertyChooser.children}
+		</Input>
 		{touched && error !== undefined && (
 			<FormHelperText>{error}</FormHelperText>
 		)}

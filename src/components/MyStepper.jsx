@@ -13,7 +13,6 @@ const getStepStyles = (step, isActive) => {
 		}
 	}
 
-	console.log(style);
 	return style;
 };
 
