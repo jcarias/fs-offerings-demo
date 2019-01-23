@@ -9,7 +9,8 @@ export const UserReducer = (state = initialState, action) => {
 			return {
 				loggedIn: false,
 				loading: true,
-				user: action.user
+				user: action.user,
+				error: null
 			};
 		case userConstants.LOGIN_SUCCESS:
 			return {

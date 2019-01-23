@@ -12,8 +12,8 @@ import PurchaseAndSalePromise from "./Containers/PurchaseAndSalePromise";
 
 const theme = createMuiTheme({
 	palette: {
-		primary: { main: "#03a9f4" },
-		secondary: { main: "#ffc400" }
+		primary: { main: "#F44336" },
+		secondary: { main: "#607D8B" }
 	},
 	typography: { useNextVariants: true }
 });

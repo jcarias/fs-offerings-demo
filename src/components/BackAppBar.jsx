@@ -20,7 +20,7 @@ const BackAppBar = props => {
 	const { classes, title } = props;
 
 	return (
-		<AppBar position="fixed" color="default">
+		<AppBar position="fixed" color="primary">
 			<Toolbar>
 				<IconButton
 					className={classes.menuButton}

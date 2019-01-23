@@ -16,6 +16,8 @@ import { history } from "../_helpers/History";
 import { RenderInputField } from "./RenderInputField";
 import { CircularProgress } from "@material-ui/core";
 
+import ErrorIcon from "@material-ui/icons/Error";
+
 class LoginForm extends Component {
 	constructor(props) {
 		super(props);
@@ -45,6 +47,22 @@ class LoginForm extends Component {
 		this.props.loginDispatcher(username, password);
 	};
 
+	customizeErrorMessage = error => {
+		let unknownErrorMgs = "An unknown error occurred";
+		if (error) {
+			if (error.response && error.response.status && error.message) {
+				switch (error.response.status) {
+					case 401:
+						return "Your login credentials do not match any active user.";
+					default:
+						return error.message;
+				}
+			}
+		}
+
+		return unknownErrorMgs;
+	};
+
 	render() {
 		const {
 			loginError,
@@ -62,8 +80,17 @@ class LoginForm extends Component {
 				)}
 
 				{loginError && (
-					<Typography align="center" color="error" gutterBottom>
-						{loginError.message}
+					<Typography
+						color="error"
+						gutterBottom
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center"
+						}}
+					>
+						<ErrorIcon style={{ marginRight: "8px" }} />
+						{this.customizeErrorMessage(loginError)}
 					</Typography>
 				)}
 
@@ -144,6 +171,7 @@ const validate = values => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+	console.log(state, ownProps);
 	return {
 		user: state.UserReducer.user,
 		loading: state.UserReducer.loading,

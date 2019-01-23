@@ -20,6 +20,16 @@ const styles = theme => ({
 	}
 });
 
+const hiddenKeys = [
+	"accessToken",
+	"authenticatorName",
+	"domain",
+	"expirationDate",
+	"id",
+	"properties",
+	"refreshToken"
+];
+
 class UserProfile extends Component {
 	constructor(props) {
 		super(props);
@@ -44,12 +54,18 @@ class UserProfile extends Component {
 						</Grid>
 						{Object.keys(loggedUser).map((key, index) => {
 							let value = loggedUser[key];
+							if (hiddenKeys.indexOf(key) > -1) {
+								return null;
+							}
 							return (
 								<React.Fragment key={index}>
 									<Grid item xs={12} sm={4} md={2}>
 										<Typography
 											color="textSecondary"
 											noWrap
+											style={{
+												textTransform: "capitalize"
+											}}
 										>
 											{key}
 										</Typography>

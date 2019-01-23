@@ -67,6 +67,7 @@ class NewsFeedPage extends Component {
 						variant="outlined"
 						onClick={this.fetchFeed}
 						disabled={loading}
+						color="inherit"
 					>
 						Refresh
 					</Button>
