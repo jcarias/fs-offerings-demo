@@ -9,6 +9,7 @@ import PropertyChooser from "./formsRP/PropertyChooser";
 
 export const RenderInputField = ({
 	input,
+	margin,
 	label,
 	type,
 	name,
@@ -17,7 +18,7 @@ export const RenderInputField = ({
 }) => (
 	<FormControl
 		fullWidth
-		margin="normal"
+		margin={margin || "normal"}
 		error={touched && error !== undefined}
 	>
 		<InputLabel htmlFor={name}>{label}</InputLabel>

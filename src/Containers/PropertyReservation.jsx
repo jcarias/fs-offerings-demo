@@ -4,10 +4,12 @@ import { withStyles, Grid, Typography, Divider } from "@material-ui/core";
 import BackAppBar from "../components/BackAppBar";
 import { stepsPropertyReservation } from "../constants/Steppers";
 import MyStepper from "../components/MyStepper";
-import PropertyChooser from "../components/formsRP/PropertyChooser";
-import PurchaseProposal from "../components/formsRP/PurchaseProposal";
+
 import { dataTemplateRP } from "../constants/cpcvFormTemplate";
 import { actionsRPReducer } from "../_reducers/PropReservationReducer";
+import { Form } from "react-final-form";
+import { sleep } from "../_helpers/utils";
+import FormPropertySelection from "../components/formsRP/FormPopertySelection";
 
 const styles = theme => ({
 	root: {
@@ -63,6 +65,13 @@ class PropertyReservation extends Component {
 		this.setState({ steps: tempSteps, activeStep: activeStep + 1 });
 	};
 
+	onSubmit = async values => {
+		await sleep(300);
+		let valuesStr = JSON.stringify(values, 0, 2);
+		window.alert(valuesStr);
+		console.log(valuesStr);
+	};
+
 	render() {
 		const { classes } = this.props;
 		return (
@@ -93,20 +102,29 @@ class PropertyReservation extends Component {
 								<Divider />
 							</Grid>
 							<Grid item>
-								{this.state.activeStep === 0 && (
-									<PropertyChooser
-										onPropertyChoiceSubmission={
-											this.onPropertyChoiceSubmission
+								<Form
+									onSubmit={this.onSubmit}
+									initialValues={this.props.prData}
+									component={FormPropertySelection}
+									validate={values => {
+										const errors = {};
+										const { propertySelection } = values;
+										if (propertySelection) {
+											console.log(propertySelection);
+											if (!propertySelection.propertyId) {
+												errors.propertySelection = {
+													propertyId: "Required"
+												};
+											}
+										} else {
+											errors.propertySelection = {
+												propertyId: "Required"
+											};
 										}
-									/>
-								)}
-								{this.state.activeStep === 1 && (
-									<PurchaseProposal
-										onPropertyChoiceSubmission={
-											this.onPropertyChoiceSubmission
-										}
-									/>
-								)}
+										return errors;
+									}}
+									activeStep={this.state.activeStep}
+								/>
 							</Grid>
 						</Grid>
 					</Grid>
@@ -117,7 +135,9 @@ class PropertyReservation extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-	return {};
+	return {
+		prData: state.PropertyReservationReducer.data
+	};
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
 	return {
