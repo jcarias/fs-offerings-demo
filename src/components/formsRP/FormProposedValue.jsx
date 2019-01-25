@@ -1,7 +1,14 @@
 import React from "react";
 import { Field, Form } from "react-final-form";
 import { RenderInputField } from "../RenderInputField";
-import { withStyles, Button, Switch } from "@material-ui/core";
+import {
+	withStyles,
+	Button,
+	Typography,
+	Grid,
+	Divider,
+	Switch
+} from "@material-ui/core";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 
 const styles = theme => ({
@@ -19,33 +26,53 @@ const styles = theme => ({
 	}
 });
 
-const validateForm = values => {
+const validate = values => {
 	const errors = {};
-	if (!values.propertyId) {
-		errors.propertyId = "Required";
+	if (!values.proposedValue) {
+		errors.proposedValue = "Required";
+	}
+
+	if (isNaN(values.proposedValue)) {
+		errors.proposedValue = "Invalid value";
+	}
+
+	if (Number(values.proposedValue) <= 0) {
+		errors.proposedValue = "The value must be bigger than 0";
 	}
 
 	return errors;
 };
 
-const FormPropertySelection = props => {
-	const { onSubmit, initialValues, readOnly, classes, auxData } = props;
+const FormProposedValue = props => {
+	const { onSubmit, initialValues, classes, auxData } = props;
 	return (
 		<Form
 			onSubmit={onSubmit}
 			initialValues={initialValues}
-			validate={validateForm}
+			validate={validate}
 			render={({ handleSubmit, submitting, pristine, form }) => (
 				<form onSubmit={handleSubmit}>
-					<Switch checked={auxData.propertySelection.completed} />
 					<div>
+						<Switch checked={auxData.purchaseProposal.completed} />
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="stretch"
+						>
+							<Typography variant="caption">
+								ID da propriedade
+							</Typography>
+							<Typography variant="body1" gutterBottom>
+								{auxData.propertySelection.propertyId}
+							</Typography>
+							<Divider />
+						</Grid>
 						<Field
-							label="ID da propriedade"
-							name="propertyId"
+							label="Valor da Proposta"
+							name="proposedValue"
 							component={RenderInputField}
-							placeholder="XXXAAA000"
 							margin="dense"
-							readOnly={readOnly}
 						/>
 					</div>
 
@@ -61,11 +88,11 @@ const FormPropertySelection = props => {
 						</Button>
 						<Button
 							type="submit"
-							disabled={submitting}
+							disabled={submitting || pristine}
 							variant="contained"
 							color="primary"
 						>
-							Propor Preço
+							Enviar proposta
 							<KeyboardArrowRight className={classes.rightIcon} />
 						</Button>
 					</div>
@@ -75,4 +102,4 @@ const FormPropertySelection = props => {
 	);
 };
 
-export default withStyles(styles)(FormPropertySelection);
+export default withStyles(styles)(FormProposedValue);

@@ -10,6 +10,7 @@ import UserProfile from "./Containers/UserProfile";
 import NewsFeedPage from "./Containers/NewsFeedPage";
 import PurchaseAndSalePromise from "./Containers/PurchaseAndSalePromise";
 import PropertyReservation from "./Containers/PropertyReservation";
+import IncomeCalculator from "./Containers/IncomeCalculator";
 
 const theme = createMuiTheme({
 	palette: {
@@ -47,6 +48,10 @@ class App extends Component {
 						<PrivateRoute
 							path="/property-reservation"
 							component={PropertyReservation}
+						/>
+						<PrivateRoute
+							path="/income-calculator"
+							component={IncomeCalculator}
 						/>
 						<Route component={NoMatch} />
 					</Switch>

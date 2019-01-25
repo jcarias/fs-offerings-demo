@@ -37,6 +37,9 @@ const styles = theme => ({
 	},
 	gridPadding: {
 		padding: theme.spacing.unit
+	},
+	menuItemNoIcon: {
+		marginLeft: 40
 	}
 });
 
@@ -108,6 +111,17 @@ class HomePage extends Component {
 									</ListItemIcon>
 									<Typography variant="inherit">
 										Profile
+									</Typography>
+								</MenuItem>
+								<MenuItem
+									component={Link}
+									to="/income-calculator"
+								>
+									<Typography
+										variant="inherit"
+										className={classes.menuItemNoIcon}
+									>
+										Calculatora
 									</Typography>
 								</MenuItem>
 								<Divider />

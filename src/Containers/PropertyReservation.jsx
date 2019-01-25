@@ -7,14 +7,19 @@ import MyStepper from "../components/MyStepper";
 
 import { dataTemplateRP } from "../constants/cpcvFormTemplate";
 import { actionsRPReducer } from "../_reducers/PropReservationReducer";
-import { Form } from "react-final-form";
-import { sleep } from "../_helpers/utils";
+
 import FormPropertySelection from "../components/formsRP/FormPopertySelection";
+import FormProposedValue from "../components/formsRP/FormProposedValue";
 
 const styles = theme => ({
 	root: {
-		padding: theme.spacing.unit,
-		paddingTop: theme.spacing.unit * 9
+		paddingTop: theme.spacing.unit * 8
+	},
+	stepperContainer: {
+		height: `calc(100vh - 64px)`,
+		overflow: "auto",
+		backgroundColor: theme.palette.background.paper,
+		borderRight: "1px solid " + theme.palette.divider
 	}
 });
 
@@ -23,7 +28,8 @@ class PropertyReservation extends Component {
 		super(props);
 		this.state = {
 			activeStep: props.activeStep || 0,
-			steps: [...stepsPropertyReservation],
+			currentStep: props.currentStep || 0,
+			steps: [],
 			formData: {}
 		};
 	}
@@ -32,7 +38,19 @@ class PropertyReservation extends Component {
 		let template = { ...dataTemplateRP };
 		this.setState({
 			activeStep: template.currentStep,
-			formData: template.formData
+			formData: template.formData,
+			steps: [...stepsPropertyReservation]
+		});
+	}
+
+	componentWillUnmount() {
+		console.log("componentWillUnmount...");
+
+		this.setState({
+			activeStep: 0,
+			currentStep: 0,
+			steps: [],
+			formData: {}
 		});
 	}
 
@@ -43,12 +61,7 @@ class PropertyReservation extends Component {
 	getStepLabel = () => {
 		const { steps, activeStep } = this.state;
 		let step = steps[activeStep];
-		return step.label;
-	};
-
-	onPropertyChoiceSubmission = values => {
-		this.props.updatePropertyReservation({ ...values });
-		this.goToNextStep();
+		return step ? step.label : "loading...";
 	};
 
 	goToNextStep = () => {
@@ -62,30 +75,45 @@ class PropertyReservation extends Component {
 			nextStep.visited = true;
 		}
 
-		this.setState({ steps: tempSteps, activeStep: activeStep + 1 });
+		let currentStep = tempSteps.findIndex(
+			step => step.visited === true && step.completed === false
+		);
+
+		this.setState({
+			steps: tempSteps,
+			activeStep: activeStep + 1,
+			currentStep
+		});
 	};
 
 	onSubmit = async values => {
-		await sleep(300);
-		let valuesStr = JSON.stringify(values, 0, 2);
-		window.alert(valuesStr);
-		console.log(valuesStr);
+		if (this.state.activeStep === 0) {
+			this.props.updatePropertyReservation(values);
+			this.goToNextStep();
+		}
+		if (this.state.activeStep === 1) {
+			this.props.updateProposedValue(values);
+			this.goToNextStep();
+		}
 	};
 
 	render() {
 		const { classes } = this.props;
+
 		return (
 			<div className={classes.root}>
 				<BackAppBar title={"Reserva de Propriedade"} />
 				<Grid container>
 					<Grid item>
-						<MyStepper
-							activeStep={this.state.activeStep}
-							stepsData={this.state.steps}
-							labelClickHandler={this.handleStepClick}
-							currentStepClass={classes.currentStep}
-							expanded={true}
-						/>
+						<div className={classes.stepperContainer}>
+							<MyStepper
+								activeStep={this.state.activeStep}
+								stepsData={this.state.steps}
+								labelClickHandler={this.handleStepClick}
+								currentStepClass={classes.currentStep}
+								expanded={true}
+							/>
+						</div>
 					</Grid>
 					<Grid item xs style={{ padding: 16 }}>
 						<Grid
@@ -102,29 +130,30 @@ class PropertyReservation extends Component {
 								<Divider />
 							</Grid>
 							<Grid item>
-								<Form
-									onSubmit={this.onSubmit}
-									initialValues={this.props.prData}
-									component={FormPropertySelection}
-									validate={values => {
-										const errors = {};
-										const { propertySelection } = values;
-										if (propertySelection) {
-											console.log(propertySelection);
-											if (!propertySelection.propertyId) {
-												errors.propertySelection = {
-													propertyId: "Required"
-												};
-											}
-										} else {
-											errors.propertySelection = {
-												propertyId: "Required"
-											};
+								{this.state.activeStep === 0 && (
+									<FormPropertySelection
+										onSubmit={this.onSubmit}
+										initialValues={
+											this.props.propResData
+												.propertySelection
 										}
-										return errors;
-									}}
-									activeStep={this.state.activeStep}
-								/>
+										activeStep={this.state.activeStep}
+										readOnly={false}
+										auxData={this.props.propResData}
+									/>
+								)}
+
+								{this.state.activeStep === 1 && (
+									<FormProposedValue
+										onSubmit={this.onSubmit}
+										initialValues={
+											this.props.propResData
+												.purchaseProposal
+										}
+										activeStep={this.state.activeStep}
+										auxData={this.props.propResData}
+									/>
+								)}
 							</Grid>
 						</Grid>
 					</Grid>
@@ -135,8 +164,9 @@ class PropertyReservation extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+	console.log(state);
 	return {
-		prData: state.PropertyReservationReducer.data
+		propResData: state.PropertyReservationReducer.data
 	};
 };
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -145,6 +175,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 			dispatch({
 				type: actionsRPReducer.UPDATE_PROPERTY_SELECTION,
 				propertySelection
+			});
+		},
+		updateProposedValue: purchaseProposal => {
+			dispatch({
+				type: actionsRPReducer.UPDATE_PURCHASE_PROPOSAL,
+				purchaseProposal
 			});
 		}
 	};

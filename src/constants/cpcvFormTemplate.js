@@ -11,10 +11,10 @@ export const dataTemplateRP = {
 	currentStep: 0,
 	data: {
 		propertySelection: {
-			propertyId: ""
+			propertyId: "1"
 		},
 		purchaseProposal: {
-			purposedValue: 0
+			proposedValue: 0
 		}
 	}
 };
